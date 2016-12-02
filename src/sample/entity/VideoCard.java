@@ -75,6 +75,10 @@ public class VideoCard {
         this.typeOfMemory = typeOfMemory;
     }
 
+    public void setTypeOfMemory(String typeOfMemory){
+        this.typeOfMemory = TypeOfMemory.valueOf(typeOfMemory);
+    }
+
     public int getGuarantee() {
         return guarantee;
     }
