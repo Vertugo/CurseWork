@@ -3,7 +3,7 @@ package sample.entity;
 /**
  * Created by Alex on 17.11.2016.
  */
-public class MotherBoard {
+public class MotherBoard implements Comparable {
     private String name;
     private String connector_type;
     private String chipset;
@@ -11,7 +11,8 @@ public class MotherBoard {
     private int guarantee;
     private double price;
 
-    public MotherBoard(String name, String connector_type, String chipset, String physical_dimension, int guarantee, double price) {
+    public MotherBoard(String name, String connector_type, String chipset, String physical_dimension,
+                       int guarantee, double price) {
         this.name = name;
         this.connector_type = connector_type;
         this.chipset = chipset;
@@ -66,5 +67,26 @@ public class MotherBoard {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    @Override
+    public String toString() {
+        return "MotherBoard{" +
+                "name='" + name + '\'' +
+                ", connector_type='" + connector_type + '\'' +
+                ", chipset='" + chipset + '\'' +
+                ", physical_dimension='" + physical_dimension + '\'' +
+                ", guarantee=" + guarantee +
+                ", price=" + price +
+                '}';
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        if(this.getPrice() > ((MotherBoard)o).getPrice())
+            return 1;
+        if(this.getPrice() < ((MotherBoard) o).getPrice())
+            return -1;
+        return 0;
     }
 }

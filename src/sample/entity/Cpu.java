@@ -3,7 +3,7 @@ package sample.entity;
 /**
  * Created by Alex on 17.11.2016.
  */
-public class CPU {
+public class CPU implements Comparable {
     private String name;
     private String connector_type;
     private int number_of_cores;
@@ -117,5 +117,32 @@ public class CPU {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    @Override
+    public String toString() {
+        return "CPU{" +
+                "name='" + name + '\'' +
+                ", connector_type='" + connector_type + '\'' +
+                ", number_of_cores=" + number_of_cores +
+                ", internal_clock_rate=" + internal_clock_rate +
+                ", the_unlocked_multiplier='" + the_unlocked_multiplier + '\'' +
+                ", the_frequency_of_the_data_bus=" + the_frequency_of_the_data_bus +
+                ", number_of_contacts=" + number_of_contacts +
+                ", TDP_power=" + TDP_power +
+                ", kernel_type='" + kernel_type + '\'' +
+                ", guarantee=" + guarantee +
+                ", price=" + price +
+                '}';
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        CPU temp = (CPU)o;
+        if(this.getPrice()>temp.getPrice()) {
+            return 1;
+        }else if(this.getPrice() < temp.getPrice())
+            return -1;
+        return 0;
     }
 }

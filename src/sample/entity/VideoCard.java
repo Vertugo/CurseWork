@@ -5,23 +5,25 @@ import sample.entity.enums.TypeOfMemory;
 /**
  * Created by Alex on 17.11.2016.
  */
-public class VideoCard {
+public class VideoCard implements Comparable {
     private String name;
     private String the_graphics_chip;
     private int memory_frequency;
     private int core_clock;
     private double memory_size;
+    private int bit_memory_bus;
     private TypeOfMemory typeOfMemory;
     private int guarantee;
     private double price;
 
     public VideoCard(String name, String the_graphics_chip, int memory_frequency, int core_clock,
-                     double memory_size, TypeOfMemory typeOfMemory, int guarantee, double price) {
+                     double memory_size,int bit_memory_bus, TypeOfMemory typeOfMemory, int guarantee, double price) {
         this.name = name;
         this.the_graphics_chip = the_graphics_chip;
         this.memory_frequency = memory_frequency;
         this.core_clock = core_clock;
         this.memory_size = memory_size;
+        this.bit_memory_bus = bit_memory_bus;
         this.typeOfMemory = typeOfMemory;
         this.guarantee = guarantee;
         this.price = price;
@@ -93,5 +95,38 @@ public class VideoCard {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    public int getBit_memory_bus() {
+        return bit_memory_bus;
+    }
+
+    public void setBit_memory_bus(int bit_memory_bus) {
+        this.bit_memory_bus = bit_memory_bus;
+    }
+
+    @Override
+    public String toString() {
+        return "VideoCard{" +
+                "name='" + name + '\'' +
+                ", the_graphics_chip='" + the_graphics_chip + '\'' +
+                ", memory_frequency=" + memory_frequency +
+                ", core_clock=" + core_clock +
+                ", memory_size=" + memory_size +
+                ", bit_memory_bus=" + bit_memory_bus +
+                ", typeOfMemory=" + typeOfMemory +
+                ", guarantee=" + guarantee +
+                ", price=" + price +
+                '}';
+    }
+
+    @Override
+    public int compareTo(Object o) {
+       VideoCard temp = (VideoCard) o;
+        if(this.getPrice() > temp.getPrice())
+            return 1;
+        if(this.getPrice() < temp.getPrice())
+            return -1;
+        return 0;
     }
 }

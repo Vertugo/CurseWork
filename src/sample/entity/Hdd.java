@@ -3,7 +3,7 @@ package sample.entity;
 /**
  * Created by Alex on 17.11.2016.
  */
-public class HDD {
+public class HDD implements Comparable {
     private String name;
     private int capacity;
     private String interface_hdd;
@@ -76,5 +76,14 @@ public class HDD {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        if(this.getPrice() > ((HDD) o).getPrice())
+            return 1;
+        if(this.getPrice() < ((HDD) o).getPrice())
+            return -1;
+        return 0;
     }
 }

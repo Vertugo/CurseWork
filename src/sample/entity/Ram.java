@@ -1,6 +1,7 @@
 package sample.entity;
 
 import sample.entity.enums.TypeOfMemory;
+import sample.entity.enums.TypeRam;
 
 /**
  * Created by Alex on 17.11.2016.
@@ -8,10 +9,10 @@ import sample.entity.enums.TypeOfMemory;
 
 
 
-public class RAM {
+public class RAM implements Comparable {
     private String name;
     private int memory_size;
-    private TypeOfMemory typeOfMemory;
+    private TypeRam typeOfMemory;
     private double supply_voltage;
     private int memory_frequency;
     private int effective_bandwidth;
@@ -19,7 +20,7 @@ public class RAM {
     private int guarantee;
     private double price;
 
-    public RAM(String name, int memory_size, TypeOfMemory typeOfMemory, double supply_voltage,
+    public RAM(String name, int memory_size, TypeRam typeOfMemory, double supply_voltage,
                int memory_frequency, int effective_bandwidth, int number_if_strips, int guarantee, double price) {
         this.name = name;
         this.memory_size = memory_size;
@@ -48,11 +49,11 @@ public class RAM {
         this.memory_size = memory_size;
     }
 
-    public TypeOfMemory getTypeOfMemory() {
+    public TypeRam getTypeOfMemory() {
         return typeOfMemory;
     }
 
-    public void setTypeOfMemory(TypeOfMemory typeOfMemory) {
+    public void setTypeOfMemory(TypeRam typeOfMemory) {
         this.typeOfMemory = typeOfMemory;
     }
 
@@ -102,5 +103,29 @@ public class RAM {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    @Override
+    public String toString() {
+        return "RAM{" +
+                "name='" + name + '\'' +
+                ", memory_size=" + memory_size +
+                ", typeOfMemory=" + typeOfMemory +
+                ", supply_voltage=" + supply_voltage +
+                ", memory_frequency=" + memory_frequency +
+                ", effective_bandwidth=" + effective_bandwidth +
+                ", number_if_strips=" + number_if_strips +
+                ", guarantee=" + guarantee +
+                ", price=" + price +
+                '}';
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        if(this.getPrice() >((RAM)o).getPrice())
+            return 1;
+        if(this.getPrice() < ((RAM) o).getPrice())
+            return -1;
+        return 0;
     }
 }
