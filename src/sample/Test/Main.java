@@ -9,8 +9,7 @@ import sample.entity.*;
 public class Main {
     public static void main(String[] args) throws Exception {
         Model model = new Model();
-       for(CPU cpu:model.searchCPU("Intel Core i5")){
-           System.out.println(cpu);
-       }
+       for(VideoCard card:model.searchVideoCard("MSI"))
+           System.out.println(card);
     }
 }

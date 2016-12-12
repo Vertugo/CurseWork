@@ -3,16 +3,13 @@ package sample;
 import sample.entity.*;
 import sample.entity.enums.TypeOfMemory;
 import sample.entity.enums.TypeRam;
-import sun.reflect.generics.tree.Tree;
+import sample.jdbc.TExecutor;
 
-import java.net.URI;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.Set;
-import java.util.TreeSet;
+import java.util.ArrayList;
 
 /**
  * Created by Alex on 02.12.2016.
@@ -33,30 +30,68 @@ public class Model {
     /**
      * Запросы для поиска по имени комплектующего
      */
-    private final String searchCPU = "SELECT * FROM cpus WHERE cpu_name = ";
-    private final String searchVideoCard = "SELECT * FROM video_card where video_name = ";
-    private final String searchRam = "SELECT * FROM ram WHERE ram_name = ";
-    private final String searchMotherBoard = "SELECT * FROM mother_board where mother_board_name = ";
-    private final String searchHousing = "SELECT * FROM housing WHERE housing_name = ";
-    private final String searchHDD = "SELECT * FROM hdd WHERE hdd_name = ";
+    private final String searchCPU = "SELECT * FROM cpus WHERE cpu_name LIKE ";
+    private final String searchVideoCard = "SELECT * FROM video_card where video_name LIKE ";
+    private final String searchRam = "SELECT * FROM ram WHERE ram_name LIKE ";
+    private final String searchMotherBoard = "SELECT * FROM mother_board where mother_board_name LIKE ";
+    private final String searchHousing = "SELECT * FROM housing WHERE housing_name LIKE ";
+    private final String searchHDD = "SELECT * FROM hdd WHERE hdd_name LIKE ";
+    /**
+     * Запросы на удаление по имени
+     */
+    private final String deleteFromCPU = "DELETE FROM cpus WHERE cpu_name = ";
+    private final String deleteFromVideoCard = "DELETE FROM video_card WHERE video_name = ";
+    private final String deleteFromHDD = "DELETE  FROM hdd WHERE hdd_name = ";
+    private final String deleteFromMotherBoard = "DELETE FROM mother_board WHERE mother_board_name = ";
+    private final String deleteFromRam = "DELETE FROM ram WHERE ram_name = ";
+    private final String deleteFromHousing = "DELETE FROM housing WHERE housing_name = ";
 
-    private TreeSet<VideoCard> videoCards;
-    private TreeSet<CPU> cpuSet;
-    private TreeSet<HDD> hddSet;
-    private TreeSet<MotherBoard> motherBoardSet;
-    private TreeSet<RAM> ramSet;
-    private TreeSet<Housing> housingSet;
+
+    private ArrayList<VideoCard> videoCards;
+    private ArrayList<CPU> cpuSet;
+    private ArrayList<HDD> hddSet;
+    private ArrayList<MotherBoard> motherBoardSet;
+    private ArrayList<RAM> ramSet;
+    private ArrayList<Housing> housingSet;
 
     public Model() {
-        this.videoCards = new TreeSet<>();
-        this.cpuSet = new TreeSet<>();
-        this.hddSet = new TreeSet<>();
-        this.motherBoardSet = new TreeSet<>();
-        this.ramSet = new TreeSet<>();
-        this.housingSet = new TreeSet<>();
+        this.videoCards = new ArrayList<>();
+        this.cpuSet = new ArrayList<>();
+        this.hddSet = new ArrayList<>();
+        this.motherBoardSet = new ArrayList<>();
+        this.ramSet = new ArrayList<>();
+        this.housingSet = new ArrayList<>();
     }
 
-    public TreeSet<VideoCard> getVideoCards(){
+    public ArrayList<CPU> getCpu(){
+        return this.cpuSet;
+    }
+
+    public void setVideoCards(ArrayList<VideoCard> videoCards) {
+        this.videoCards = videoCards;
+    }
+
+    public void setCpuSet(ArrayList<CPU> cpuSet) {
+        this.cpuSet = cpuSet;
+    }
+
+    public void setHddSet(ArrayList<HDD> hddSet) {
+        this.hddSet = hddSet;
+    }
+
+    public void setMotherBoardSet(ArrayList<MotherBoard> motherBoardSet) {
+        this.motherBoardSet = motherBoardSet;
+    }
+
+    public void setRamSet(ArrayList<RAM> ramSet) {
+        this.ramSet = ramSet;
+    }
+
+    public void setHousingSet(ArrayList<Housing> housingSet) {
+        this.housingSet = housingSet;
+    }
+
+    public ArrayList<VideoCard> getVideoCards(){
         TExecutor tExecutor = new TExecutor();
 
         if(!videoCards.isEmpty()){
@@ -66,6 +101,7 @@ public class Model {
         try(Connection connection = DriverManager.getConnection(URL,USERNAME,PASSWORD)) {
             this.videoCards = tExecutor.execQuery(connection,queryVideoCard,resultSet ->{
                 while (resultSet.next()){
+                    int id = resultSet.getInt("id");
                     String name = resultSet.getString("video_name");
                     String the_graphics_chip = resultSet.getString("the_graphics_chip");
                     int memory_frequency = resultSet.getInt("memory_frequency");
@@ -76,7 +112,7 @@ public class Model {
                     int guarantee = resultSet.getInt("guarantee");
                     double price = resultSet.getDouble("price");
 
-                    videoCards.add(new VideoCard(name,the_graphics_chip,memory_frequency,core_clock,memory_size,bit_memory_bus,typeOfMemory,guarantee,price));
+                    videoCards.add(new VideoCard(id,name,the_graphics_chip,memory_frequency,core_clock,memory_size,bit_memory_bus,typeOfMemory,guarantee,price));
                 }
                 return this.videoCards;
             } );
@@ -86,7 +122,7 @@ public class Model {
         return this.videoCards;
     }
 
-    public Set<CPU> getCpuSet(){
+    public ArrayList<CPU> getCpuSet(){
         TExecutor tExecutor = new TExecutor();
 
         if(!cpuSet.isEmpty()){
@@ -96,6 +132,7 @@ public class Model {
         try(Connection connection = DriverManager.getConnection(URL,USERNAME,PASSWORD)) {
             this.cpuSet = tExecutor.execQuery(connection,queryCPU,resultSet ->{
                 while (resultSet.next()){
+                    int id = resultSet.getInt("id");
                     String name = resultSet.getString("cpu_name");
                     String connector_type = resultSet.getString("connector_type");
                     int number_of_cores = resultSet.getInt("number_of_cores");
@@ -108,7 +145,7 @@ public class Model {
                     int guarantee = resultSet.getInt("guarantee");
                     double price = resultSet.getDouble("price");
 
-                    this.cpuSet.add(new CPU(name,connector_type,number_of_cores,internal_clock_rate,the_unlocked_multiplier,
+                    this.cpuSet.add(new CPU(id,name,connector_type,number_of_cores,internal_clock_rate,the_unlocked_multiplier,
                             frequency,number_of_contacts,TDP_power,kernel_name,guarantee,price));
                 }
 
@@ -120,7 +157,7 @@ public class Model {
         return this.cpuSet;
     }
 
-    public TreeSet<HDD> getHddSet(){
+    public ArrayList<HDD> getHddSet(){
         TExecutor tExecutor = new TExecutor();
 
         if(!hddSet.isEmpty()){
@@ -130,6 +167,7 @@ public class Model {
         try(Connection connection = DriverManager.getConnection(URL,USERNAME,PASSWORD)) {
             this.hddSet = tExecutor.execQuery(connection,queryHDD,resultSet -> {
                 while (resultSet.next()){
+                    int id = resultSet.getInt("id");
                     String name = resultSet.getString("hdd_name");
                     int capacity = resultSet.getInt("capacity_hdd");
                     String interface_hdd = resultSet.getString("interface");
@@ -138,7 +176,7 @@ public class Model {
                     int guarantee = resultSet.getInt("guarantee");
                     double price = resultSet.getDouble("price");
 
-                    this.hddSet.add(new HDD(name,capacity,interface_hdd,the_volume_of_buffer,the_data_rate,guarantee,
+                    this.hddSet.add(new HDD(id,name,capacity,interface_hdd,the_volume_of_buffer,the_data_rate,guarantee,
                             price));
                 }
                 return this.hddSet;
@@ -150,12 +188,13 @@ public class Model {
         return this.hddSet;
     }
 
-    public TreeSet<MotherBoard> getMotherBoardSet(){
+    public ArrayList<MotherBoard> getMotherBoardSet(){
         TExecutor tExecutor = new TExecutor();
 
         try(Connection connection = DriverManager.getConnection(URL,USERNAME,PASSWORD)){
             this.motherBoardSet = tExecutor.execQuery(connection,queryMotherBoard,resultSet -> {
                 while (resultSet.next()){
+                    int id = resultSet.getInt("id");
                     String name = resultSet.getString("mother_board_name");
                     String connector_type = resultSet.getString("connector_type");
                     String chipset = resultSet.getString("chipset");
@@ -164,7 +203,7 @@ public class Model {
                     double price = resultSet.getDouble("price");
 
 
-                    this.motherBoardSet.add(new MotherBoard(name,connector_type,chipset,physical_dimension,guarantee,price));
+                    this.motherBoardSet.add(new MotherBoard(id,name,connector_type,chipset,physical_dimension,guarantee,price));
                 }
                 return this.motherBoardSet;
             });
@@ -174,12 +213,13 @@ public class Model {
         return this.motherBoardSet;
     }
 
-    public TreeSet<RAM> getRamSet(){
+    public ArrayList<RAM> getRamSet(){
         TExecutor tExecutor = new TExecutor();
 
         try(Connection connection = DriverManager.getConnection(URL,USERNAME,PASSWORD)){
             this.ramSet = tExecutor.execQuery(connection,queryRam,resultSet ->{
                 while (resultSet.next()){
+                    int id = resultSet.getInt("id");
                     String name = resultSet.getString("ram_name");
                     int memory_size = resultSet.getInt("memory_size");
                     TypeRam typeRam = TypeRam.valueOf(resultSet.getString("type_of_memory").replaceAll(" ",""));
@@ -190,7 +230,7 @@ public class Model {
                     int guarantee = resultSet.getInt("guarantee");
                     double price = resultSet.getDouble("price");
 
-                    this.ramSet.add(new RAM(name,memory_size,typeRam,supply_voltage,memory_frequency,effective_bandwidth,
+                    this.ramSet.add(new RAM(id,name,memory_size,typeRam,supply_voltage,memory_frequency,effective_bandwidth,
                             number_of_strips,guarantee,price));
                 }
                 return this.ramSet;
@@ -201,19 +241,20 @@ public class Model {
         return this.ramSet;
     }
 
-    public TreeSet<Housing> getHousingSet(){
+    public ArrayList<Housing> getHousingSet(){
         TExecutor tExecutor = new TExecutor();
 
         try(Connection connection = DriverManager.getConnection(URL,USERNAME,PASSWORD)){
             this.housingSet = tExecutor.execQuery(connection,queryHousing,resultSet -> {
                 while (resultSet.next()){
+                    int id = resultSet.getInt("id");
                     String name = resultSet.getString("housing_name");
                     String material = resultSet.getString("housing_material");
                     String type = resultSet.getString("type_of_housing");
                     int guarantee = resultSet.getInt("guarantee");
                     double price = resultSet.getDouble("price");
 
-                    this.housingSet.add(new Housing(name,material,type,guarantee,price));
+                    this.housingSet.add(new Housing(id,name,material,type,guarantee,price));
                 }
                 return this.housingSet;
             });
@@ -223,15 +264,15 @@ public class Model {
         return this.housingSet;
     }
 
-    public TreeSet<CPU> searchCPU(String search){
+    public ArrayList<CPU> searchCPU(String search){
         TExecutor tExecutor = new TExecutor();
-        TreeSet<CPU> tempCPUTreeSet = new TreeSet<>();
+        ArrayList<CPU> tempCPUArrayList = new ArrayList<>();
         try(Connection connection = DriverManager.getConnection(URL,USERNAME,PASSWORD)){
-            tempCPUTreeSet = tExecutor.execQuery(connection,searchCPU + "'" + search + "'",resultSet -> {
-                TreeSet<CPU> set = new TreeSet<CPU>();
+            tempCPUArrayList = tExecutor.execQuery(connection,searchCPU + "'" + search + "%'",resultSet -> {
+                ArrayList<CPU> set = new ArrayList<CPU>();
                 while (resultSet.next()){
+                    int id = resultSet.getInt("id");
                     String name = resultSet.getString("cpu_name");
-                    if(search.equals(name)){
                         String connector_type = resultSet.getString("connector_type");
                         int number_of_cores = resultSet.getInt("number_of_cores");
                         int internal_clock_rate = resultSet.getInt("internal_clock_rate");
@@ -243,27 +284,26 @@ public class Model {
                         int guarantee = resultSet.getInt("guarantee");
                         double price = resultSet.getDouble("price");
 
-                        set.add(new CPU(name,connector_type,number_of_cores,internal_clock_rate,the_unlocked_multiplier,
+                        set.add(new CPU(id,name,connector_type,number_of_cores,internal_clock_rate,the_unlocked_multiplier,
                                 frequency,number_of_contacts,TDP_power,kernel_name,guarantee,price));
-                    }else continue;
                 }
                 return set;
             });
         }catch (SQLException e){
             e.printStackTrace();
         }
-        return tempCPUTreeSet;
+        return tempCPUArrayList;
     }
 
-    public TreeSet<VideoCard> searchVideoCard(String search){
+    public ArrayList<VideoCard> searchVideoCard(String search){
         TExecutor tExecutor = new TExecutor();
-        TreeSet<VideoCard> tempVideoCardSet = new TreeSet<>();
+        ArrayList<VideoCard> tempVideoCardSet = new ArrayList<>();
         try(Connection connection = DriverManager.getConnection(URL,USERNAME,PASSWORD)){
-            tempVideoCardSet = tExecutor.execQuery(connection,searchVideoCard + "'" + search + "'",resultSet -> {
-                TreeSet<VideoCard> set = new TreeSet<VideoCard>();
+            tempVideoCardSet = tExecutor.execQuery(connection,searchVideoCard + "'" + search + "%'",resultSet -> {
+                ArrayList<VideoCard> set = new ArrayList<VideoCard>();
                 while (resultSet.next()){
-                    String name = resultSet.getString("video_name");
-                    if(name.equals(search)){
+                        int id = resultSet.getInt("id");
+                        String name = resultSet.getString("video_name");
                         String the_graphics_chip = resultSet.getString("the_graphics_chip");
                         int memory_frequency = resultSet.getInt("memory_frequency");
                         int core_clock = resultSet.getInt("core_clock");
@@ -273,9 +313,8 @@ public class Model {
                         int guarantee = resultSet.getInt("guarantee");
                         double price = resultSet.getDouble("price");
 
-                        set.add(new VideoCard(name,the_graphics_chip,memory_frequency,core_clock,memory_size,
+                        set.add(new VideoCard(id,name,the_graphics_chip,memory_frequency,core_clock,memory_size,
                                 bit_memory_bus,typeOfMemory,guarantee,price));
-                    }else continue;
                 }
                 return set;
             });
@@ -285,16 +324,16 @@ public class Model {
         return tempVideoCardSet;
     }
 
-    public TreeSet<RAM> searchRam(String search){
+    public ArrayList<RAM> searchRam(String search){
         TExecutor tExecutor = new TExecutor();
-        TreeSet<RAM> searchSet = new TreeSet<>();
+        ArrayList<RAM> searchSet = new ArrayList<>();
 
         try(Connection connection = DriverManager.getConnection(URL,USERNAME,PASSWORD)){
-        searchSet = tExecutor.execQuery(connection,searchRam + "'" + search + "'",resultSet -> {
-            TreeSet<RAM> set = new TreeSet<RAM>();
+        searchSet = tExecutor.execQuery(connection,searchRam + "'" + search + "%'",resultSet -> {
+            ArrayList<RAM> set = new ArrayList<RAM>();
             while (resultSet.next()){
+                int id = resultSet.getInt("id");
                 String name = resultSet.getString("ram_name");
-                if(name.equals(search)){
                     int memory_size = resultSet.getInt("memory_size");
                     TypeRam typeRam = TypeRam.valueOf(resultSet.getString("type_of_memory").replaceAll(" ",""));
                     double supply_voltage = resultSet.getDouble("supply_voltage");
@@ -304,9 +343,8 @@ public class Model {
                     int guarantee = resultSet.getInt("guarantee");
                     double price = resultSet.getDouble("price");
 
-                    set.add(new RAM(name,memory_size,typeRam,supply_voltage,memory_frequency,effective_bandwidth,
+                    set.add(new RAM(id,name,memory_size,typeRam,supply_voltage,memory_frequency,effective_bandwidth,
                             number_of_strips,guarantee,price));
-                }else  continue;
             }
             return set;
         });
@@ -316,25 +354,23 @@ public class Model {
         return searchSet;
     }
 
-    public TreeSet<MotherBoard> searchMotherBoard(String search){
+    public ArrayList<MotherBoard> searchMotherBoard(String search){
         TExecutor tExecutor = new TExecutor();
-        TreeSet<MotherBoard> searchSet = new TreeSet<>();
+        ArrayList<MotherBoard> searchSet = new ArrayList<>();
 
         try(Connection connection = DriverManager.getConnection(URL,USERNAME,PASSWORD)){
-            searchSet = tExecutor.execQuery(connection,searchMotherBoard + "'" + search + "'",resultSet -> {
-                TreeSet<MotherBoard> set = new TreeSet<>();
+            searchSet = tExecutor.execQuery(connection,searchMotherBoard + "'" + search + "%'",resultSet -> {
+                ArrayList<MotherBoard> set = new ArrayList<>();
                 while (resultSet.next()){
+                    int id = resultSet.getInt("id");
                     String name = resultSet.getString("mother_board_name");
-                    if(name.equals(search)){
                         String connector_type = resultSet.getString("connector_type");
                         String chipset = resultSet.getString("chipset");
                         String physical_dimension = resultSet.getString("physical_dimensions");
                         int guarantee = resultSet.getInt("guarantee");
                         double price = resultSet.getDouble("price");
-
-                        set.add(new MotherBoard(name,connector_type,chipset,physical_dimension,
+                        set.add(new MotherBoard(id,name,connector_type,chipset,physical_dimension,
                                 guarantee,price));
-                    }
                 }
                 return set;
             });
@@ -344,23 +380,22 @@ public class Model {
         return searchSet;
     }
 
-    public TreeSet<Housing> searchHousing(String search){
+    public ArrayList<Housing> searchHousing(String search){
         TExecutor tExecutor = new TExecutor();
-        TreeSet<Housing> searchHousingSet = new TreeSet<>();
+        ArrayList<Housing> searchHousingSet = new ArrayList<>();
 
         try(Connection connection = DriverManager.getConnection(URL,USERNAME,PASSWORD)){
-            searchHousingSet = tExecutor.execQuery(connection,searchHousing + "'" + search + "'",resultSet -> {
-                TreeSet<Housing> set = new TreeSet<Housing>();
+            searchHousingSet = tExecutor.execQuery(connection,searchHousing + "'" + search + "%'",resultSet -> {
+                ArrayList<Housing> set = new ArrayList<Housing>();
                 while (resultSet.next()){
-                    String name = resultSet.getString("housing_name");
-                    if(name.equals(search)){
+                    int id = resultSet.getInt("id");
+                        String name = resultSet.getString("housing_name");
                         String material = resultSet.getString("housing_material");
                         String type = resultSet.getString("type_of_housing");
                         int guarantee = resultSet.getInt("guarantee");
                         double price = resultSet.getDouble("price");
 
-                        set.add(new Housing(name,material,type,guarantee,price));
-                    }else continue;
+                        set.add(new Housing(id,name,material,type,guarantee,price));
                 }
                 return set;
             } );
@@ -370,16 +405,16 @@ public class Model {
         return searchHousingSet;
     }
 
-    public TreeSet<HDD> searchHDD(String search){
+    public ArrayList<HDD> searchHDD(String search){
         TExecutor tExecutor = new TExecutor();
-        TreeSet<HDD> searchSet = new TreeSet<>();
+        ArrayList<HDD> searchSet = new ArrayList<>();
 
         try(Connection connection = DriverManager.getConnection(URL,USERNAME,PASSWORD)) {
-            searchSet = tExecutor.execQuery(connection,searchHDD + "'" + search + "'",resultSet -> {
-                TreeSet<HDD> set = new TreeSet<HDD>();
+            searchSet = tExecutor.execQuery(connection,searchHDD + "'" + search + "%'",resultSet -> {
+                ArrayList<HDD> set = new ArrayList<HDD>();
                 while (resultSet.next()){
-                    String name = resultSet.getString("hdd_name");
-                    if(name.equals(search)){
+                        int id = resultSet.getInt("id");
+                        String name = resultSet.getString("hdd_name");
                         int capacity = resultSet.getInt("capacity_hdd");
                         String interface_hdd = resultSet.getString("interface");
                         int the_volume_of_buffer = resultSet.getInt("the_volume_of_buffer");
@@ -387,9 +422,8 @@ public class Model {
                         int guarantee = resultSet.getInt("guarantee");
                         double price = resultSet.getDouble("price");
 
-                        set.add(new HDD(name,capacity,interface_hdd,the_volume_of_buffer,the_data_rate,
+                        set.add(new HDD(id,name,capacity,interface_hdd,the_volume_of_buffer,the_data_rate,
                                 guarantee,price));
-                    }else continue;
                 }
                 return set;
             });
@@ -397,5 +431,21 @@ public class Model {
             e.printStackTrace();
         }
         return searchSet;
+    }
+
+    public void deleteCPU(String name){
+        try(Connection connection = DriverManager.getConnection(URL,USERNAME,PASSWORD)){
+            TExecutor.execUpdate(connection,deleteFromCPU + "'" + name + "'");
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
+
+    public void deleteRam(String name){
+        try(Connection connection = DriverManager.getConnection(URL,USERNAME,PASSWORD)){
+            TExecutor.execUpdate(connection,deleteFromRam + "'" + name + "'");
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
     }
 }

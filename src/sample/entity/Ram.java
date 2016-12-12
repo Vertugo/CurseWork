@@ -10,6 +10,7 @@ import sample.entity.enums.TypeRam;
 
 
 public class RAM implements Comparable {
+    private int id;
     private String name;
     private int memory_size;
     private TypeRam typeOfMemory;
@@ -20,8 +21,9 @@ public class RAM implements Comparable {
     private int guarantee;
     private double price;
 
-    public RAM(String name, int memory_size, TypeRam typeOfMemory, double supply_voltage,
+    public RAM(int id,String name, int memory_size, TypeRam typeOfMemory, double supply_voltage,
                int memory_frequency, int effective_bandwidth, int number_if_strips, int guarantee, double price) {
+        this.id = id;
         this.name = name;
         this.memory_size = memory_size;
         this.typeOfMemory = typeOfMemory;
@@ -31,6 +33,10 @@ public class RAM implements Comparable {
         this.number_if_strips = number_if_strips;
         this.guarantee = guarantee;
         this.price = price;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public String getName() {

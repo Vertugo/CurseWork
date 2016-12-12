@@ -4,6 +4,7 @@ package sample.entity;
  * Created by Alex on 17.11.2016.
  */
 public class MotherBoard implements Comparable {
+    private int id;
     private String name;
     private String connector_type;
     private String chipset;
@@ -11,14 +12,19 @@ public class MotherBoard implements Comparable {
     private int guarantee;
     private double price;
 
-    public MotherBoard(String name, String connector_type, String chipset, String physical_dimension,
+    public MotherBoard(int id,String name, String connector_type, String chipset, String physical_dimension,
                        int guarantee, double price) {
+        this.id = id;
         this.name = name;
         this.connector_type = connector_type;
         this.chipset = chipset;
         this.physical_dimension = physical_dimension;
         this.guarantee = guarantee;
         this.price = price;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public String getName() {

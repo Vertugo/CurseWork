@@ -4,6 +4,7 @@ package sample.entity;
  * Created by Alex on 17.11.2016.
  */
 public class CPU implements Comparable {
+    private int id;
     private String name;
     private String connector_type;
     private int number_of_cores;
@@ -16,8 +17,9 @@ public class CPU implements Comparable {
     private int guarantee;
     private double price;
 
-    public CPU(String name, String connector_type, int number_of_cores, int internal_clock_rate, String the_unlocked_multiplier,
+    public CPU(int id,String name, String connector_type, int number_of_cores, int internal_clock_rate, String the_unlocked_multiplier,
               double the_frequency_of_the_data_bus, int number_of_contacts, int TDP_power, String kernel_type, int guarantee, double price) {
+        this.id = id;
         this.name = name;
         this.connector_type = connector_type;
         this.number_of_cores = number_of_cores;
@@ -29,6 +31,10 @@ public class CPU implements Comparable {
         this.kernel_type = kernel_type;
         this.guarantee = guarantee;
         this.price = price;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public String getName() {

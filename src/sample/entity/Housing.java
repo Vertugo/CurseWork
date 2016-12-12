@@ -4,18 +4,24 @@ package sample.entity;
  * Created by Alex on 03.12.2016.
  */
 public class Housing implements Comparable {
+    private int id;
     private String name;
     private String material;
     private String type;
     private int guarantee;
     private double price;
 
-    public Housing(String name, String material, String type, int guarantee, double price) {
+    public Housing(int id,String name, String material, String type, int guarantee, double price) {
+        this.id = id;
         this.name = name;
         this.material = material;
         this.type = type;
         this.guarantee = guarantee;
         this.price = price;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public String getName() {

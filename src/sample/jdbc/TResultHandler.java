@@ -1,4 +1,4 @@
-package sample.interfaces;
+package sample.jdbc;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

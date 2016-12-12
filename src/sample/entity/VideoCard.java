@@ -6,6 +6,7 @@ import sample.entity.enums.TypeOfMemory;
  * Created by Alex on 17.11.2016.
  */
 public class VideoCard implements Comparable {
+    private int id;
     private String name;
     private String the_graphics_chip;
     private int memory_frequency;
@@ -16,8 +17,9 @@ public class VideoCard implements Comparable {
     private int guarantee;
     private double price;
 
-    public VideoCard(String name, String the_graphics_chip, int memory_frequency, int core_clock,
+    public VideoCard(int id,String name, String the_graphics_chip, int memory_frequency, int core_clock,
                      double memory_size,int bit_memory_bus, TypeOfMemory typeOfMemory, int guarantee, double price) {
+        this.id = id;
         this.name = name;
         this.the_graphics_chip = the_graphics_chip;
         this.memory_frequency = memory_frequency;
@@ -27,6 +29,10 @@ public class VideoCard implements Comparable {
         this.typeOfMemory = typeOfMemory;
         this.guarantee = guarantee;
         this.price = price;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public String getName() {
